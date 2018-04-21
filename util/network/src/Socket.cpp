@@ -5,12 +5,12 @@
  */
 
 #include "Socket.hxx"
-
 #ifdef __linux__
 #include <arpa/inet.h>
 #elif defined(_WIN32)
 #include <Ws2tcpip.h>
 #endif
+
 
 Socket::Socket(const std::string ip_address, const unsigned short port) {
     m_addr.sin_family = AF_INET;
@@ -24,5 +24,29 @@ Socket::Socket(const std::string ip_address, const unsigned short port) {
     }
 #endif
     m_addr.sin_port = htons(port);
+    m_remote_addr.sin_port = 0;
 }
 
+Socket::~Socket() {
+    shutdown(m_sock, 2);
+}
+
+void Socket::set_remote(const std::string ip_address, const unsigned short port) {
+    m_remote_addr.sin_family = AF_INET;
+    m_remote_addr.sin_port = htons(port);
+#ifdef __linux__
+    if(inet_pton(AF_INET, ip_address.c_str(), &m_remote_addr.sin_addr) <= 0) {
+        throw SocketException("Invalid IP Address.");
+    }
+#elif defined (_WIN32)
+    if(InetPton(AF_INET, ip_address, &m_addr.sin_addr) <= 0) { // Needs to be tested.
+        throw SocketException("Invalid IP Address.");
+    }
+#endif
+}
+
+void Socket::bind_sock() {
+    if(bind(m_sock, (struct sockaddr *)&m_addr, sizeof(m_addr)) < 0) {
+        throw SocketException("Error binding Socket.");
+    }
+}

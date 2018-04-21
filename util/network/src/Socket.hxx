@@ -22,9 +22,13 @@ class SocketException : public std::runtime_error {
 class Socket {
     public:
         Socket(const std::string ip_address, const unsigned short port);
+        virtual ~Socket(); // Allow children to declare their own destructors.
+        void set_remote(const std::string ip_address, const unsigned short port);
+        void bind_sock();
     protected:
         int m_sock;
         struct sockaddr_in m_addr;
+        struct sockaddr_in m_remote_addr;
 };
 
 #endif

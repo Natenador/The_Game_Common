@@ -13,6 +13,8 @@
 class TCPSocket : Socket {
     public:
         TCPSocket(const std::string ip_address, const unsigned short port);
+        void connect_to_server(const std::string server_addr, const unsigned short serv_port);
+        void connect_to_server();
 };
 
 #endif
