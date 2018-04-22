@@ -50,3 +50,25 @@ void Socket::bind_sock() {
         throw SocketException("Error binding Socket.");
     }
 }
+
+
+void Socket::send_message(const char buffer[], const int data_bytes) {
+    // TODO: change const char buffer[] to some variation of smart pointer?
+    char* data_ptr = (char*) &buffer;
+    int bytes_to_send = data_bytes;
+
+    while(bytes_to_send > 0) {
+        if(bytes_to_send > MAX_BUFFER_SIZE) {
+            // IF message too big for the buffer, send it piecemeal.
+            send(m_sock, data_ptr, MAX_BUFFER_SIZE, 0);
+            bytes_to_send -= MAX_BUFFER_SIZE;
+            data_ptr += MAX_BUFFER_SIZE;
+        }
+        else {
+            // If the message (or what remains of the message) is smaller than the buffer
+            // send it directly and set bytes_to_send to 0 for loop exit.
+            send(m_sock, data_ptr, bytes_to_send, 0);
+            bytes_to_send = 0;
+        }
+    }
+}
