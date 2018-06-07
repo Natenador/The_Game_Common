@@ -16,6 +16,7 @@ class TCPSocket : Socket {
         void connect_to_server(const std::string server_addr, const unsigned short serv_port);
         void connect_to_server();
         void send_message(const char buffer[], const int data_bytes);
+        int receive_message(char buffer[], const int buffer_size);
     private:
         bool connected;
 };

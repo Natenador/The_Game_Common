@@ -26,6 +26,7 @@ class Socket {
         void set_remote(const std::string ip_address, const unsigned short port);
         void bind_sock();
         void send_message(const char buffer[], const int data_bytes);
+        int receive_message(char buffer[], const int buffer_size);
     protected:
         int m_sock;
         struct sockaddr_in m_addr;

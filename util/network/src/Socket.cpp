@@ -72,3 +72,8 @@ void Socket::send_message(const char buffer[], const int data_bytes) {
         }
     }
 }
+
+
+int Socket::receive_message(char buffer[], const int buffer_size) {
+    return recv(m_sock, &buffer, buffer_size, 0);
+}

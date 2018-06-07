@@ -36,3 +36,10 @@ void TCPSocket::send_message(const char buffer[], const int data_bytes) {
     }
     Socket::send_message(buffer, data_bytes);
 }
+
+int TCPSocket::receive_message(char buffer[], const int buffer_size) {
+    if(!connected) {
+        throw SocketException("Attempted to receive a TCP message before a connection established.");
+    }
+    return Socket::receive_message(buffer, buffer_size);
+}
